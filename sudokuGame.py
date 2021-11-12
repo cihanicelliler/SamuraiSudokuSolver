@@ -18,7 +18,6 @@ val = 0
 
 f = open(r"C:\Users\icell\Desktop\Programlama\Python\SamuraiSudokuSolver\tests\easy1.txt", 'r')
 grid=changeTextFileFormat(f)
-print(grid)
  
 # Load test fonts for future use
 font1 = pygame.font.SysFont("comicsans", 10)
@@ -41,10 +40,12 @@ def draw():
     # Draw the lines
     for i in range (21):
         for j in range (21):
+            
+            if grid[i][j]== ".":
+                pygame.draw.rect(screen, (20, 20, 31), (j * dif, i * dif, dif + 1, dif + 1))
             if grid[i][j]!= "0" and grid[i][j]!= ".":
                 # Fill blue color in already numbered grid
                 pygame.draw.rect(screen, (0, 153, 153), (j * dif, i * dif, dif + 1, dif + 1))
- 
                 # Fill grid with default numbers specified
                 text1 = font1.render(str(grid[i][j]), 1, (0, 0, 0))
                 screen.blit(text1, (j * dif + 15, i * dif + 15))
@@ -56,13 +57,10 @@ def draw():
         else:
             thick = 1
         pygame.draw.line(screen, (0, 0, 0), (0, i * dif), (1050, i * dif), thick)
-        pygame.draw.line(screen, (0, 0, 0), (i * dif, 0), (i * dif, 1050), thick) 
+        pygame.draw.line(screen, (0, 0, 0), (i * dif, 0), (i * dif, 1050), thick)
     
 run = True
-flag1 = 0
 flag2 = 0
-rs = 0
-error = 0
 # The loop thats keep the window running
 while run:
      
