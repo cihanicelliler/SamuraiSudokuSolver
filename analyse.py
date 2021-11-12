@@ -2,6 +2,7 @@ import samurai
 import math
 import csv
 from Ticker import *
+from samurai import *
 
 from sudoku import *
 from collections import Counter
@@ -65,6 +66,7 @@ def random_samurai_puzzle(N_a=17, N_b=17, N_c=17, N_d=17, N_plus=17):
     if not check_middle_puzzle(grid_plus):
         return random_samurai_puzzle(N_a, N_b, N_c, N_d, N_plus)
     grid_plus = random_middle_puzzle(N_plus, grid_plus)
+
     
     samurai_grid = [grid_a[grid_index('A1'):grid_index('A9')+1].replace('.', '0') + '...' + grid_b[grid_index('A1'):grid_index('A9')+1].replace('.', '0'),
                     grid_a[grid_index('B1'):grid_index('B9')+1].replace('.', '0') + '...' + grid_b[grid_index('B1'):grid_index('B9')+1].replace('.', '0'),
@@ -88,6 +90,10 @@ def random_samurai_puzzle(N_a=17, N_b=17, N_c=17, N_d=17, N_plus=17):
                     grid_c[grid_index('H1'):grid_index('H9')+1].replace('.', '0') + '...' + grid_d[grid_index('H1'):grid_index('H9')+1].replace('.', '0'),
                     grid_c[grid_index('I1'):grid_index('I9')+1].replace('.', '0') + '...' + grid_d[grid_index('I1'):grid_index('I9')+1].replace('.', '0')]
     
+    
+    f = open(r"C:\Users\icell\Desktop\Programlama\Python\SamuraiSudokuSolver\tests\easy1.txt", 'r')
+    samurai_grid=changeTextFileFormat(f)
+    print(samurai_grid)
     init_square_count = {}
     for s in squares:
         init_square_count[s] = 0
