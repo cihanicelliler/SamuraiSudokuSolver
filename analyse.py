@@ -51,49 +51,28 @@ def random_middle_puzzle(N=17, grid='.'*81):
     return random_middle_puzzle(N, grid) ## Give up and make a new puzzle
 
 def random_samurai_puzzle(N_a=17, N_b=17, N_c=17, N_d=17, N_plus=17):
-    grid_a = random_puzzle(N_a)
-    grid_b = random_puzzle(N_b)
-    grid_c = random_puzzle(N_c)
-    grid_d = random_puzzle(N_d)
-    grid_plus = (grid_a[grid_index('G7'):grid_index('G9')+1] + '...' + grid_b[grid_index('G1'):grid_index('G3')+1]
-               + grid_a[grid_index('H7'):grid_index('H9')+1] + '...' + grid_b[grid_index('H1'):grid_index('H3')+1]
-               + grid_a[grid_index('I7'):grid_index('I9')+1] + '...' + grid_b[grid_index('I1'):grid_index('I3')+1]
-               + '.'*9*3
-               + grid_c[grid_index('A7'):grid_index('A9')+1] + '...' + grid_d[grid_index('A1'):grid_index('A3')+1]
-               + grid_c[grid_index('B7'):grid_index('B9')+1] + '...' + grid_d[grid_index('B1'):grid_index('B3')+1]
-               + grid_c[grid_index('C7'):grid_index('C9')+1] + '...' + grid_d[grid_index('C1'):grid_index('C3')+1])
-    
-    if not check_middle_puzzle(grid_plus):
-        return random_samurai_puzzle(N_a, N_b, N_c, N_d, N_plus)
-    grid_plus = random_middle_puzzle(N_plus, grid_plus)
-
-    
-    samurai_grid = [grid_a[grid_index('A1'):grid_index('A9')+1].replace('.', '0') + '...' + grid_b[grid_index('A1'):grid_index('A9')+1].replace('.', '0'),
-                    grid_a[grid_index('B1'):grid_index('B9')+1].replace('.', '0') + '...' + grid_b[grid_index('B1'):grid_index('B9')+1].replace('.', '0'),
-                    grid_a[grid_index('C1'):grid_index('C9')+1].replace('.', '0') + '...' + grid_b[grid_index('C1'):grid_index('C9')+1].replace('.', '0'),
-                    grid_a[grid_index('D1'):grid_index('D9')+1].replace('.', '0') + '...' + grid_b[grid_index('D1'):grid_index('D9')+1].replace('.', '0'),
-                    grid_a[grid_index('E1'):grid_index('E9')+1].replace('.', '0') + '...' + grid_b[grid_index('E1'):grid_index('E9')+1].replace('.', '0'),
-                    grid_a[grid_index('F1'):grid_index('F9')+1].replace('.', '0') + '...' + grid_b[grid_index('F1'):grid_index('F9')+1].replace('.', '0'),
-                    grid_a[grid_index('G1'):grid_index('G9')+1].replace('.', '0') + grid_plus[grid_index('A4'):grid_index('A6')+1].replace('.', '0') + grid_b[grid_index('G1'):grid_index('G9')+1].replace('.', '0'),
-                    grid_a[grid_index('H1'):grid_index('H9')+1].replace('.', '0') + grid_plus[grid_index('B4'):grid_index('B6')+1].replace('.', '0') + grid_b[grid_index('H1'):grid_index('H9')+1].replace('.', '0'),
-                    grid_a[grid_index('I1'):grid_index('I9')+1].replace('.', '0') + grid_plus[grid_index('C4'):grid_index('C6')+1].replace('.', '0') + grid_b[grid_index('I1'):grid_index('I9')+1].replace('.', '0'),
-                    '......' + grid_plus[grid_index('D1'):grid_index('D9')+1].replace('.', '0') + '......',
-                    '......' + grid_plus[grid_index('E1'):grid_index('E9')+1].replace('.', '0') + '......',
-                    '......' + grid_plus[grid_index('F1'):grid_index('F9')+1].replace('.', '0') + '......',
-                    grid_c[grid_index('A1'):grid_index('A9')+1].replace('.', '0') + grid_plus[grid_index('G4'):grid_index('G6')+1].replace('.', '0') + grid_d[grid_index('A1'):grid_index('A9')+1].replace('.', '0'),
-                    grid_c[grid_index('B1'):grid_index('B9')+1].replace('.', '0') + grid_plus[grid_index('H4'):grid_index('H6')+1].replace('.', '0') + grid_d[grid_index('B1'):grid_index('B9')+1].replace('.', '0'),
-                    grid_c[grid_index('C1'):grid_index('C9')+1].replace('.', '0') + grid_plus[grid_index('I4'):grid_index('I6')+1].replace('.', '0') + grid_d[grid_index('C1'):grid_index('C9')+1].replace('.', '0'),
-                    grid_c[grid_index('D1'):grid_index('D9')+1].replace('.', '0') + '...' + grid_d[grid_index('D1'):grid_index('D9')+1].replace('.', '0'),
-                    grid_c[grid_index('E1'):grid_index('E9')+1].replace('.', '0') + '...' + grid_d[grid_index('E1'):grid_index('E9')+1].replace('.', '0'),
-                    grid_c[grid_index('F1'):grid_index('F9')+1].replace('.', '0') + '...' + grid_d[grid_index('F1'):grid_index('F9')+1].replace('.', '0'),
-                    grid_c[grid_index('G1'):grid_index('G9')+1].replace('.', '0') + '...' + grid_d[grid_index('G1'):grid_index('G9')+1].replace('.', '0'),
-                    grid_c[grid_index('H1'):grid_index('H9')+1].replace('.', '0') + '...' + grid_d[grid_index('H1'):grid_index('H9')+1].replace('.', '0'),
-                    grid_c[grid_index('I1'):grid_index('I9')+1].replace('.', '0') + '...' + grid_d[grid_index('I1'):grid_index('I9')+1].replace('.', '0')]
-    
     
     f = open(r"C:\Users\icell\Desktop\Programlama\Python\SamuraiSudokuSolver\tests\easy1.txt", 'r')
     samurai_grid=changeTextFileFormat(f)
-    print(samurai_grid)
+    grid_a=""
+    grid_b=""
+    grid_c=""
+    grid_d=""
+    grid_plus=""
+    for i in range(0,9):
+        grid_a=grid_a+samurai_grid[i][:9]
+        grid_b=grid_b+samurai_grid[i][12:21]
+    for i in range(12,21):
+        grid_c=grid_c+samurai_grid[i][:9]
+        grid_d=grid_d+samurai_grid[i][12:21]
+    for i in range(6,15):
+        grid_plus=grid_plus+samurai_grid[i][6:15]
+    grid_a=grid_a.replace('0','.')
+    grid_b=grid_b.replace('0','.')
+    grid_c=grid_c.replace('0','.')
+    grid_d=grid_d.replace('0','.')
+    grid_plus=grid_plus.replace('0','.')
+    
     init_square_count = {}
     for s in squares:
         init_square_count[s] = 0
