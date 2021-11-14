@@ -7,50 +7,7 @@ from samurai import *
 from sudoku import *
 from collections import Counter
 
-overlapping_squares = ['A1', 'A2', 'A3', 'A7', 'A8', 'A9',
-                       'B1', 'B2', 'B3', 'B7', 'B8', 'B9',
-                       'C1', 'C2', 'C3', 'C7', 'C8', 'C9',
-                       'G1', 'G2', 'G3', 'G7', 'G8', 'G9',
-                       'H1', 'H2', 'H3', 'H7', 'H8', 'H9',
-                       'I1', 'I2', 'I3', 'I7', 'I8', 'I9']
-
-def random_puzzle(N=17):
-    """Make a random puzzle with N or more assignments. Restart on contradictions.
-       Note: the resulting puzzle is not guaranteed to be solvable. 
-             Some have multiple solutions."""
-    values = dict((s, digits) for s in squares)
-
-    for s in shuffled(squares):
-        if not assign(values, s, random.choice(values[s])):
-            break
-        ds = [values[s] for s in squares if len(values[s]) == 1]
-        if len(ds) >= N and len(set(ds)) >= 8:
-            return ''.join(values[s] if len(values[s])==1 else '.' for s in squares)
-    return random_puzzle(N) ## Give up and make a new puzzle
-
-def random_middle_puzzle(N=17, grid='.'*81):
-    """Make a random middle puzzle with N or more assignments. Restart on contradictions.
-       Note: the resulting puzzle is not guaranteed to be solvable. 
-             Some have multiple solutions."""
-    values = dict((s, digits) for s in squares)
-
-    for s in overlapping_squares:
-        if grid[grid_index(s)] != '.':
-            assign(values, s, grid[grid_index(s)])
-
-    ds = [values[s] for s in squares if len(values[s]) == 1]
-    if len(ds) >= N and len(set(ds)) >= 8:
-        return ''.join(values[s] if len(values[s])==1 else '.' for s in squares)
-
-    for s in shuffled(list(set(squares)-set(overlapping_squares))):
-        if not assign(values, s, random.choice(values[s])):
-            break
-        ds = [values[s] for s in squares if len(values[s]) == 1]
-        if len(ds) >= N and len(set(ds)) >= 8:
-            return ''.join(values[s] if len(values[s])==1 else '.' for s in squares)
-    return random_middle_puzzle(N, grid) ## Give up and make a new puzzle
-
-def random_samurai_puzzle(N_a=17, N_b=17, N_c=17, N_d=17, N_plus=17):
+def samurai_puzzle():
     
     f = open(r"C:\Users\icell\Desktop\Programlama\Python\SamuraiSudokuSolver\tests\easy1.txt", 'r')
     samurai_grid=changeTextFileFormat(f)
@@ -91,18 +48,7 @@ def random_samurai_puzzle(N_a=17, N_b=17, N_c=17, N_d=17, N_plus=17):
 square_indices_map = {} # Lazy map of square indices
 index_squares_map = {} # Lazy map of index squares
 
-def grid_index(square):
-    """Return the index to a list representation of a grid 
-       associated with given `square`. 
-       Ex. A2 -> 1"""
-    if square not in square_indices_map: 
-        square_indices_map[square] = ((ord(square[0])-ord('A'))*9 + (int(square[1])-1))
-    return square_indices_map[square]
-
 def index_to_square(index):
-    """Return the square associated with given `index`
-       of a grid represented as a list
-       Ex. 1 -> A2"""
     if index not in index_squares_map:
         index_squares_map[index] = chr(math.floor(index/9)+ord('A')) + str(index%9+1)
     return index_squares_map[index]
@@ -112,15 +58,6 @@ def count_initialized_squares(grid, count_map):
         if grid[i] != '.':
             count_map[index_to_square(i)] += 1
     return count_map
-
-def check_middle_puzzle(grid='.'*81):
-    values = dict((s, digits) for s in squares)
-    for s in squares:
-        if grid[grid_index(s)] != '.':
-            if not assign(values, s, grid[grid_index(s)]):
-                return False
-    return True
-
 
 ################ Data Handlers ################
 
@@ -133,12 +70,6 @@ def write_counter_to_database(name, counter):
 
 ################ Testing ################
 
-class TimeoutException(Exception):
-    pass
-
-def timeout_handler(signum, frame):
-    raise TimeoutException
-
 # Initialize Counters for each Sudoku grid 
 a = Counter()
 b = Counter()
@@ -148,39 +79,21 @@ plus = Counter()
 
 if __name__ == '__main__':
     success_counter = 0
-    timeout_counter = 0
-    num_loops = 100
+    t = Ticker(1.0) 
+    t.start()
+    samurai_grid, counts = samurai_puzzle()
+    ans = samurai.solve(samurai_grid)
+    if ans:
+        success_counter += 1
+        a.update(counts['a'])
+        b.update(counts['b'])
+        c.update(counts['c'])
+        d.update(counts['d'])
+        plus.update(counts['+'])
+        samurai.display_samurai(ans)
+    else:
+        print("Puzzle Unsolvable!")
 
-    for i in range(num_loops):
-        t = Ticker(1.0) 
-        t.start()
-
-        # This try/except loop ensures that 
-        #   you'll catch TimeoutException when it's sent.
-        try:
-            samurai_grid, counts = random_samurai_puzzle(17, 17, 17, 17, 17)
-            ans = samurai.solve(samurai_grid)
-
-            if ans:
-                success_counter += 1
-                a.update(counts['a'])
-                b.update(counts['b'])
-                c.update(counts['c'])
-                d.update(counts['d'])
-                plus.update(counts['+'])
-                samurai.display_samurai(ans) # IMPORTANT*: Used to check solution correctness
-                break
-            else:
-                print("Puzzle Unsolvable!")
-        except TimeoutException:
-            timeout_counter += 1
-            print("timout", i)
-            continue # continue the for loop if solving takes more than 10 second
-        else:
-            # Reset alarm
-            t.stop()
-            t.join()
-            print("non-timeout", i)
 
 
     # Write grid counts to csv files
@@ -191,13 +104,6 @@ if __name__ == '__main__':
     write_counter_to_database('grid_plus_success_hits.csv', plus)
 
     print('#'*100)
-    print("Number of Initial Squares Filled in each Grid Quadrant:")
-    print("Top Left: ", 17, "Top Right: ", 17, 'Bottom Left: ', 17, 'Bottom Right: ', 17, 'Centre: ', 17)
     print("Successes:     ", success_counter)
-    print("Failures:      ", num_loops-success_counter)
-    print("Success Ratio: ", success_counter/num_loops)
-    print("Timouts:       ", timeout_counter)
-    print("Timout Ratio:  ", timeout_counter/num_loops)
-    print("Failures include puzzles with no solution and puzzles that the solver took too long to solve")
     print('#'*100)
 

@@ -1,7 +1,7 @@
 from math import pi
 import random
 import time
-
+from Ticker import *
 
 def cross(A, B, c=''):
     "Cross product of elements in A and elements in B."
@@ -208,10 +208,12 @@ def search(values):
     """
     Using depth-first search and propagation, try all possible values.
     """
+    print(values)
     if values is False:
         return False  # Failed earlier
     if all(len(values[s]) == 1 for s in all_squares):
         return values  # Solved!
+    
     # Chose the unfilled square s with the fewest possibilities
     n, s = min((len(values[s]), s) for s in all_squares if len(values[s]) > 1)
     return some(search(assign(values.copy(), s, d))
@@ -224,6 +226,7 @@ def some(seq):
     """
     Return some element of seq that is true.
     """
+    
     for e in seq:
         if e:
             return e
@@ -255,9 +258,9 @@ def solve_all(grids, name='', showif=0.0):
     When showif is None, don't display any puzzles.
     """
     def time_solve(grid):
-        start = time.clock()
+        start = time.process_time()
         values = solve(grid)
-        t = time.clock()-start
+        t = time.process_time()-start
         # Display puzzles that take long enough
         if showif is not None and t > showif:
             display(grid_values(grid))
@@ -306,16 +309,16 @@ def changeTextFileFormat(file):
 
 
 if __name__ == '__main__':
-    prompt = 1
-    while prompt:
-        txt = input("Insert file path containing the Samurai Sudoku:")
-        try:
-            f = open(txt, 'r')
-            prompt = 0
-        except FileNotFoundError:
-            print("File not found. (Example test cases can be found under "
-                  "~/tests)\n")
-
+    # prompt = 1
+    # while prompt:
+    #     txt = input("Insert file path containing the Samurai Sudoku:")
+    #     try:
+    #         f = open(txt, 'r')
+    #         prompt = 0
+    #     except FileNotFoundError:
+    #         print("File not found. (Example test cases can be found under "
+    #               "~/tests)\n")
+    f = open(r"C:\Users\icell\Desktop\Programlama\Python\SamuraiSudokuSolver\tests\easy1.txt", 'r')
     f=changeTextFileFormat(f)
     samurai_grid = f
     ans = solve(samurai_grid)
