@@ -79,10 +79,11 @@ def draw_a(values, sqr):
     for i in range(9):
         for j in range(9):
             time.sleep(1)
-            text = font1.render(values[sqr[count]], 10, (255, 0, 0))
+            text = font1.render(values[sqr[count]], 10, (0, 255, 0))
             screen.blit(text, (j * dif + 15, i * dif + 15))
             count += 1
             print("a")
+            pygame.display.update() 
 
 
 def draw_b(values, sqr):
@@ -90,10 +91,11 @@ def draw_b(values, sqr):
     for i in range(9):
         for j in range(12, 21):
             time.sleep(1)
-            text = font1.render(values[sqr[count]], 10, (255, 0, 0))
+            text = font1.render(values[sqr[count]], 10, (0, 255, 0))
             screen.blit(text, (j * dif + 15, i * dif + 15))
             count += 1
             print("b")
+            pygame.display.update() 
 
 
 def draw_c(values, sqr):
@@ -101,10 +103,11 @@ def draw_c(values, sqr):
     for i in range(12, 21):
         for j in range(9):
             time.sleep(1)
-            text = font1.render(values[sqr[count]], 10, (255, 0, 0))
+            text = font1.render(values[sqr[count]], 10, (0, 255, 0))
             screen.blit(text, (j * dif + 15, i * dif + 15))
             count += 1
             print("c")
+            pygame.display.update() 
 
 
 def draw_d(values, sqr):
@@ -112,10 +115,11 @@ def draw_d(values, sqr):
     for i in range(12, 21):
         for j in range(12, 21):
             time.sleep(1)
-            text = font1.render(values[sqr[count]], 10, (255, 0, 0))
+            text = font1.render(values[sqr[count]], 10, (0, 255, 0))
             screen.blit(text, (j * dif + 15, i * dif + 15))
             count += 1
             print("d")
+            pygame.display.update() 
 
 
 def draw_plus(values, sqr):
@@ -123,10 +127,11 @@ def draw_plus(values, sqr):
     for i in range(6, 15):
         for j in range(6, 15):
             time.sleep(1)
-            text = font1.render(values[sqr[count]], 10, (255, 0, 0))
+            text = font1.render(values[sqr[count]], 10, (0, 255, 0))
             screen.blit(text, (j * dif + 15, i * dif + 15))
             count += 1
             print("plus")
+            pygame.display.update() 
 
 run = True
 flag2 = 0
@@ -149,8 +154,13 @@ while run:
     t3=Thread(target=draw_c,args=(ans,square_c,)).start()
     t4=Thread(target=draw_d,args=(ans,square_d,)).start()
     t5=Thread(target=draw_plus,args=(ans,square_mid,)).start()
+    t1.join()
+    t2.join()
+    t3.join()
+    t4.join()
+    t5.join()
     pygame.display.update() 
-    # Update window
+# Update window
 
 # Quit pygame window
 pygame.quit()
