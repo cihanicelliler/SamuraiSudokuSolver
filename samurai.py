@@ -208,7 +208,6 @@ def search(values):
     """
     Using depth-first search and propagation, try all possible values.
     """
-    print(values)
     if values is False:
         return False  # Failed earlier
     if all(len(values[s]) == 1 for s in all_squares):
