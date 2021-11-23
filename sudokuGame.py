@@ -367,8 +367,8 @@ y1=[0,five_threads]
 y2=[0,ten_threads]
 x1=[0,founded_squares_for_five_thread]
 x2=[0,founded_squares_for_Ten_thread]
-plt.plot(x1, y1)
-plt.plot(x2, y2)
+plt.plot(x1, y1 ,'--')
+plt.plot(x2, y2 ,'--')
 plt.xlabel("Founded Square")
 plt.ylabel("Time")
 plt.legend(['Five Threads','Ten Threads'])
