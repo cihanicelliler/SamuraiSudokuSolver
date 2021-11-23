@@ -25,6 +25,8 @@ grid = changeTextFileFormat(f)
 font1 = pygame.font.SysFont("comicsans", 10)
 font2 = pygame.font.SysFont("comicsans", 10, True)
 
+founded_squares_for_five_thread=0
+founded_squares_for_Ten_thread=0
 
 def get_cord(pos):
     global x
@@ -70,6 +72,8 @@ def draw_a(values, sqr):
     for i in range(9):
         for j in range(9):
             time.sleep(0.1)
+            global founded_squares_for_five_thread
+            founded_squares_for_five_thread = founded_squares_for_five_thread+1
             text = font2.render(values[sqr[count]], 10, (0, 255, 0))
             screen.blit(text, (j * dif + 15, i * dif + 15))
             count += 1
@@ -82,6 +86,8 @@ def draw_a_for_two_threads_first(values, sqr):
             if(i==4 and j==4):
                 return
             time.sleep(0.1)
+            global founded_squares_for_Ten_thread
+            founded_squares_for_Ten_thread=founded_squares_for_Ten_thread+1
             text = font2.render(values[sqr[count]], 10, (0, 255, 0))
             screen.blit(text, (j * dif + 15, i * dif + 15))
             count += 1
@@ -95,6 +101,8 @@ def draw_a_for_two_threads_second(values, sqr):
             k=0
         for j in range(k,9):
             time.sleep(0.1)
+            global founded_squares_for_Ten_thread
+            founded_squares_for_Ten_thread=founded_squares_for_Ten_thread+1
             text = font2.render(values[sqr[count]], 10, (0, 255, 0))
             screen.blit(text, (j * dif + 15, i * dif + 15))
             count += 1
@@ -105,6 +113,8 @@ def draw_b(values, sqr):
     for i in range(9):
         for j in range(12, 21):
             time.sleep(0.1)
+            global founded_squares_for_five_thread
+            founded_squares_for_five_thread = founded_squares_for_five_thread+1
             text = font2.render(values[sqr[count]], 10, (0, 255, 0))
             screen.blit(text, (j * dif + 15, i * dif + 15))
             count += 1
@@ -117,6 +127,8 @@ def draw_b_for_two_threads_first(values, sqr):
             if(i==4 and j==16):
                 return
             time.sleep(0.1)
+            global founded_squares_for_Ten_thread
+            founded_squares_for_Ten_thread=founded_squares_for_Ten_thread+1
             text = font2.render(values[sqr[count]], 10, (0, 255, 0))
             screen.blit(text, (j * dif + 15, i * dif + 15))
             count += 1
@@ -130,6 +142,8 @@ def draw_b_for_two_threads_second(values, sqr):
             k=12
         for j in range(k, 21):
             time.sleep(0.1)
+            global founded_squares_for_Ten_thread
+            founded_squares_for_Ten_thread=founded_squares_for_Ten_thread+1
             text = font2.render(values[sqr[count]], 10, (0, 255, 0))
             screen.blit(text, (j * dif + 15, i * dif + 15))
             count += 1
@@ -140,6 +154,8 @@ def draw_c(values, sqr):
     for i in range(12, 21):
         for j in range(9):
             time.sleep(0.1)
+            global founded_squares_for_five_thread
+            founded_squares_for_five_thread = founded_squares_for_five_thread+1
             text = font2.render(values[sqr[count]], 10, (0, 255, 0))
             screen.blit(text, (j * dif + 15, i * dif + 15))
             count += 1
@@ -152,6 +168,8 @@ def draw_c_for_two_threads_first(values, sqr):
             if(i==16 and j==4):
                 return
             time.sleep(0.1)
+            global founded_squares_for_Ten_thread
+            founded_squares_for_Ten_thread=founded_squares_for_Ten_thread+1
             text = font2.render(values[sqr[count]], 10, (0, 255, 0))
             screen.blit(text, (j * dif + 15, i * dif + 15))
             count += 1
@@ -165,6 +183,8 @@ def draw_c_for_two_threads_second(values, sqr):
             k=0
         for j in range(k,9):
             time.sleep(0.1)
+            global founded_squares_for_Ten_thread
+            founded_squares_for_Ten_thread=founded_squares_for_Ten_thread+1
             text = font2.render(values[sqr[count]], 10, (0, 255, 0))
             screen.blit(text, (j * dif + 15, i * dif + 15))
             count += 1
@@ -175,6 +195,8 @@ def draw_d(values, sqr):
     for i in range(12, 21):
         for j in range(12, 21):
             time.sleep(0.1)
+            global founded_squares_for_five_thread
+            founded_squares_for_five_thread = founded_squares_for_five_thread+1
             text = font2.render(values[sqr[count]], 10, (0, 255, 0))
             screen.blit(text, (j * dif + 15, i * dif + 15))
             count += 1
@@ -187,6 +209,8 @@ def draw_d_for_two_threads_first(values, sqr):
             if(i==16 and j==16):
                 return
             time.sleep(0.1)
+            global founded_squares_for_Ten_thread
+            founded_squares_for_Ten_thread=founded_squares_for_Ten_thread+1
             text = font2.render(values[sqr[count]], 10, (0, 255, 0))
             screen.blit(text, (j * dif + 15, i * dif + 15))
             count += 1
@@ -200,6 +224,8 @@ def draw_d_for_two_threads_second(values, sqr):
             k=12
         for j in range(k, 21):
             time.sleep(0.1)
+            global founded_squares_for_Ten_thread
+            founded_squares_for_Ten_thread=founded_squares_for_Ten_thread+1
             text = font2.render(values[sqr[count]], 10, (0, 255, 0))
             screen.blit(text, (j * dif + 15, i * dif + 15))
             count += 1
@@ -210,6 +236,8 @@ def draw_plus(values, sqr):
     for i in range(6, 15):
         for j in range(6, 15):
             time.sleep(0.1)
+            global founded_squares_for_five_thread
+            founded_squares_for_five_thread = founded_squares_for_five_thread+1
             text = font2.render(values[sqr[count]], 10, (0, 255, 0))
             screen.blit(text, (j * dif + 15, i * dif + 15))
             count += 1
@@ -222,6 +250,8 @@ def draw_plus_for_two_threads_first(values, sqr):
             if(i==10 and j==10):
                 return
             time.sleep(0.1)
+            global founded_squares_for_Ten_thread
+            founded_squares_for_Ten_thread=founded_squares_for_Ten_thread+1
             text = font2.render(values[sqr[count]], 10, (0, 255, 0))
             screen.blit(text, (j * dif + 15, i * dif + 15))
             count += 1
@@ -235,6 +265,8 @@ def draw_plus_for_two_threads_second(values, sqr):
             k=6
         for j in range(k, 15):
             time.sleep(0.1)
+            global founded_squares_for_Ten_thread
+            founded_squares_for_Ten_thread=founded_squares_for_Ten_thread+1
             text = font2.render(values[sqr[count]], 10, (0, 255, 0))
             screen.blit(text, (j * dif + 15, i * dif + 15))
             count += 1
@@ -331,9 +363,14 @@ pygame.quit()
 
 five_threads = elapsed_time_for_five_threads
 ten_threads = elapsed_time_for_ten_threads
-names=['Five Threads','Ten Threads']
-values=[five_threads,ten_threads]
-
-plt.bar(names, values)
+y1=[0,five_threads]
+y2=[0,ten_threads]
+x1=[0,founded_squares_for_five_thread]
+x2=[0,founded_squares_for_Ten_thread]
+plt.plot(x1, y1)
+plt.plot(x2, y2)
+plt.xlabel("Founded Square")
+plt.ylabel("Time")
+plt.legend(['Five Threads','Ten Threads'])
 plt.suptitle('Comparing Threads')
 plt.show()
