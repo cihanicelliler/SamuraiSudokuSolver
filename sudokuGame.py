@@ -3,6 +3,7 @@ import pygame
 from samurai import *
 from multiprocessing import Process
 import win32api
+import matplotlib.pyplot as plt
 
 
 pygame.font.init()
@@ -238,7 +239,6 @@ def draw_plus_for_two_threads_second(values, sqr):
             pygame.display.update() 
 
 def display_message(elapsed_time):
-    elapsed_time=int(elapsed_time)
     elapsed_time=str(elapsed_time)
     win32api.MessageBox(0, 'GAME IS DONE! It tooks: '+elapsed_time+' seconds.','SUCCESSFULL!')
     time.sleep(3)
@@ -326,3 +326,12 @@ elapsed_time_for_ten_threads = current_time - start_time
 display_message(elapsed_time_for_ten_threads)
 
 pygame.quit()
+
+five_threads = elapsed_time_for_five_threads
+ten_threads = elapsed_time_for_ten_threads
+names=['Five Threads','Ten Threads']
+values=[five_threads,ten_threads]
+
+plt.bar(names, values)
+plt.suptitle('Comparing Threads')
+plt.show()
