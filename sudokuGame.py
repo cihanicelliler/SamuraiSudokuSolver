@@ -1,4 +1,6 @@
 from threading import Thread
+import time
+from time import sleep
 import pygame
 from samurai import *
 from multiprocessing import Process
