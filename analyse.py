@@ -9,7 +9,7 @@ from collections import Counter
 
 def samurai_puzzle():
     
-    f = open(r"C:\Users\icell\Desktop\Programlama\Python\SamuraiSudokuSolver\tests\easy1.txt", 'r')
+    f = open(r"C:\Users\z004d20z\Desktop\Programlama\Python\SamuraiSudoku\SamuraiSudokuSolver\tests\easy1.txt", 'r')
     samurai_grid=changeTextFileFormat(f)
     grid_a=""
     grid_b=""
@@ -79,8 +79,6 @@ plus = Counter()
 
 if __name__ == '__main__':
     success_counter = 0
-    t = Ticker(1.0) 
-    t.start()
     samurai_grid, counts = samurai_puzzle()
     ans = samurai.solve(samurai_grid)
     if ans:

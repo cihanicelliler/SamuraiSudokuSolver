@@ -1,7 +1,4 @@
-from math import pi
-import random
-import time
-from Ticker import *
+import csv
 
 def cross(A, B, c=''):
     "Cross product of elements in A and elements in B."
@@ -12,34 +9,33 @@ digits = '123456789'
 rows = 'ABCDEFGHI'
 cols = digits
 
-id_var = 'a'  # top left
+id_var = 'a'
 square_a = cross(rows, cols, id_var)
 unitlist_a = ([cross(rows, c, id_var) for c in cols] +
               [cross(r, cols, id_var) for r in rows] +
               [cross(rs, cs, id_var) for rs in ('ABC', 'DEF', 'GHI')
                for cs in ('123', '456', '789')])
 
-id_var = 'b'  # top right
+id_var = 'b'
 square_b = cross(rows, cols, id_var)
 unitlist_b = ([cross(rows, c, id_var) for c in cols] +
               [cross(r, cols, id_var) for r in rows] +
               [cross(rs, cs, id_var) for rs in ('ABC', 'DEF', 'GHI')
                for cs in ('123', '456', '789')])
 
-id_var = 'c'  # bottom left
+id_var = 'c'
 square_c = cross(rows, cols, id_var)
 unitlist_c = ([cross(rows, c, id_var) for c in cols] +
               [cross(r, cols, id_var) for r in rows] +
               [cross(rs, cs, id_var) for rs in ('ABC', 'DEF', 'GHI')
                for cs in ('123', '456', '789')])
 
-id_var = 'd'  # bottom right
+id_var = 'd' 
 square_d = cross(rows, cols, id_var)
 unitlist_d = ([cross(rows, c, id_var) for c in cols] +
               [cross(r, cols, id_var) for r in rows] +
               [cross(rs, cs, id_var) for rs in ('ABC', 'DEF', 'GHI')
                for cs in ('123', '456', '789')])
-
 
 def repl(c):
     a = b = 0
@@ -88,26 +84,24 @@ peers = dict((s, set(sum(units[s], []))-set([s]))
              for s in all_squares)
 
 
-################ Parse a Grid ################
-
 def parse_grid_samurai(grid):
-    """Convert grid to a dict of possible values, {square: digits}, or
-    return False if a contradiction is detected."""
-    # To start, every square can be any digit; then assign values from the grid.
     values = dict((s, digits) for s in all_squares)
     for s, d in grid_values(grid).items():
         if d in digits and not assign(values, s, d):
-            # (Fail if we can't assign d to square s.)
             return False
     return values
-
+   
+def write_points_to_database(name, counter):
+    writer = csv.writer(open(name, 'w'))
+    writer.writerow(['Column and Digit', 'State' , 'Numbers'])
+    for key, value in counter.items():
+        writer.writerow([key[0]+ key[1], key[2], value])
 
 def flatten(arr):
     return [x for sub in arr for x in sub]
 
 
 def grid_values(grid):
-    "Convert grid into a dict of {square: char} with '0' or '.' for empties."
     a = flatten([x[:9] for x in grid[:9]])
     b = flatten([x[12:] for x in grid[:9]])
     c = flatten([x[:9] for x in grid[12:]])
@@ -118,12 +112,7 @@ def grid_values(grid):
     assert len(chars) == 405
     return dict(zip(sqrs, chars))
 
-################ Constraint Propagation ################
-
-
 def assign(values, s, d):
-    """Eliminate all the other values (except d) from values[s] and propagate.
-    Return values, except return False if a contradiction is detected."""
     other_values = values[s].replace(d, '')
     if all(eliminate(values, s, d2) for d2 in other_values):
         return values
@@ -132,41 +121,26 @@ def assign(values, s, d):
 
 
 def eliminate(values, s, d):
-    """Eliminate d from values[s]; propagate when values or places <= 2.
-    Return values, except return False if a contradiction is detected."""
     if d not in values[s]:
-        # Already eliminated
         return values
     values[s] = values[s].replace(d, '')
-    # (1) If a square s is reduced to one value d2,
-    # then eliminate d2 from the peers.
     if len(values[s]) == 0:
-        # Contradiction: removed last value
         return False
     elif len(values[s]) == 1:
         d2 = values[s]
         if not all(eliminate(values, s2, d2) for s2 in peers[s]):
             return False
-    # (2) If a unit u is reduced to only one place for a value d,
-    # then put it there.
     for u in units[s]:
         dplaces = [s for s in u if d in values[s]]
         if len(dplaces) == 0:
-            # Contradiction: no place for this value
             return False
         elif len(dplaces) == 1:
-            # d can only be in one place in unit; assign it there
             if not assign(values, dplaces[0], d):
                 return False
     return values
 
-################ Display as 2-D grid ################
-
 
 def display(values, sqr):
-    """
-    Display sudoku in a 2-D grid.
-    """
     width = 1+max(len(values[s]) for s in sqr)
     line = '+'.join(['-'*(width*3)]*3)
     for r in rows:
@@ -178,11 +152,6 @@ def display(values, sqr):
 
 
 def display_samurai(vals):
-    """
-    prints the squares in order of: top left, top right, bottom left,
-    bottom right, middle. Note that the middle square overlaps with the
-    other 4 and will contain duplicate values
-    """
     if not vals:
         print("Solution not found, please check if test is valid.")
         return
@@ -198,86 +167,29 @@ def display_samurai(vals):
     display(vals, square_mid)
 
 
-################ Search ################
-
 def solve(grid):
     return search(parse_grid_samurai(grid))
 
 
 def search(values):
-    """
-    Using depth-first search and propagation, try all possible values.
-    """
     if values is False:
-        return False  # Failed earlier
+        return False
     if all(len(values[s]) == 1 for s in all_squares):
-        return values  # Solved!
-    
-    # Chose the unfilled square s with the fewest possibilities
+        write_points_to_database("PointsSuccess.csv",values)
+        return values
+    write_points_to_database("Points.csv",values)
     n, s = min((len(values[s]), s) for s in all_squares if len(values[s]) > 1)
     return some(search(assign(values.copy(), s, d))
                 for d in values[s])
 
-################ Utilities ################
 
-
-def some(seq):
-    """
-    Return some element of seq that is true.
-    """
-    
+def some(seq):    
     for e in seq:
         if e:
             return e
     return False
 
-
-def from_file(filename, sep='\n'):
-    """
-    Parse a file into a list of strings, separated by sep.
-    """
-    return open(filename, 'r').read().strip().split(sep)
-
-
-def shuffled(seq):
-    """
-    Return a randomly shuffled copy of the input sequence.
-    """
-    seq = list(seq)
-    random.shuffle(seq)
-    return seq
-
-# System test ################  UNUSED
-
-
-def solve_all(grids, name='', showif=0.0):
-    """
-    Attempt to solve a sequence of grids. Report results.
-    When showif is a number of seconds, display puzzles that take longer.
-    When showif is None, don't display any puzzles.
-    """
-    def time_solve(grid):
-        start = time.process_time()
-        values = solve(grid)
-        t = time.process_time()-start
-        # Display puzzles that take long enough
-        if showif is not None and t > showif:
-            display(grid_values(grid))
-            if values:
-                display(values)
-            print('(%.2f seconds)\n' % t)
-        return (t, solved(values))
-    times, results = zip(*[time_solve(grid) for grid in grids])
-    N = len(grids)
-    if N > 1:
-        print("Solved %d of %d %s puzzles (avg %.2f secs (%d Hz), max %.2f secs)."
-              % (sum(results), N, name, sum(times)/N, N/sum(times), max(times)))
-
-
 def solved(values):
-    """
-    A puzzle is solved if each unit is a permutation of the digits 1 to 9.
-    """
     def unitsolved(unit):
         return set(values[s] for s in unit) == set(digits)
     return values is not False and all(unitsolved(unit) for unit in all_unitlists)
@@ -304,20 +216,9 @@ def changeTextFileFormat(file):
     newFile=newFile.split('\n')
     return newFile
 
-#####################################
-
 
 if __name__ == '__main__':
-    # prompt = 1
-    # while prompt:
-    #     txt = input("Insert file path containing the Samurai Sudoku:")
-    #     try:
-    #         f = open(txt, 'r')
-    #         prompt = 0
-    #     except FileNotFoundError:
-    #         print("File not found. (Example test cases can be found under "
-    #               "~/tests)\n")
-    f = open(r"C:\Users\icell\Desktop\Programlama\Python\SamuraiSudokuSolver\tests\easy1.txt", 'r')
+    f = open(r"C:\Users\z004d20z\Desktop\Programlama\Python\SamuraiSudoku\SamuraiSudokuSolver\tests\easy1.txt", 'r')
     f=changeTextFileFormat(f)
     samurai_grid = f
     ans = solve(samurai_grid)
